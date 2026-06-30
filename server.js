@@ -10,10 +10,7 @@ const PORT = parseInt(process.env.PORT ?? '3000', 10)
 const PUBLIC_DIR = path.join(__dirname, 'public')
 const PAGE_SIZE = 1000
 
-const supabase = createClient(
-  normalizeSupabaseUrl(process.env.SUPABASE_URL),
-  normalizeServiceKey(process.env.SUPABASE_SERVICE_KEY)
-)
+let supabaseClient = null
 
 const contentTypes = new Map([
   ['.html', 'text/html; charset=utf-8'],
@@ -29,6 +26,15 @@ function sendJson(res, status, payload) {
     'cache-control': 'no-store',
   })
   res.end(JSON.stringify(payload))
+}
+
+function getSupabaseClient() {
+  if (supabaseClient) return supabaseClient
+
+  const supabaseUrl = normalizeSupabaseUrl(process.env.SUPABASE_URL)
+  const serviceKey = normalizeServiceKey(process.env.SUPABASE_SERVICE_KEY)
+  supabaseClient = createClient(supabaseUrl, serviceKey)
+  return supabaseClient
 }
 
 function parseStore(row) {
@@ -63,6 +69,7 @@ function priceBand(price) {
 }
 
 async function fetchAllRawRows(runIds) {
+  const supabase = getSupabaseClient()
   const rows = []
   let from = 0
 
@@ -89,6 +96,7 @@ async function fetchAllRawRows(runIds) {
 }
 
 async function buildDashboardPayload() {
+  const supabase = getSupabaseClient()
   const { data: runs, error: runsError } = await supabase
     .from('scrape_runs')
     .select('id,store_id,status,pages_fetched,rows_inserted,started_at,finished_at,stores!inner(slug,location_label,city)')
@@ -231,6 +239,11 @@ async function serveStatic(req, res) {
 const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url, `http://${req.headers.host}`)
+    if (url.pathname === '/health') {
+      sendJson(res, 200, { ok: true })
+      return
+    }
+
     if (url.pathname === '/api/dashboard') {
       const payload = await buildDashboardPayload()
       sendJson(res, 200, payload)
@@ -246,4 +259,5 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`Dashboard running on http://localhost:${PORT}`)
+  console.log('If this is running in Replit, open the Webview or public preview URL.')
 })
