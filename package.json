@@ -1,0 +1,16 @@
+{
+  "name": "bay-area-traderjoes-tracker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "commonjs",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "scrape:tj": "node scripts/scrapers/traderjoes.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.101.1"
+  }
+}

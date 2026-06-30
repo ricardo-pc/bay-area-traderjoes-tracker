@@ -1,0 +1,27 @@
+name: Scrape Trader Joe's
+
+on:
+  schedule:
+    - cron: '0 8 * * 1'
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install
+      - run: npm run scrape:tj
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          TJ_AVAILABILITY: '1'
+          TJ_PAGE_SIZE: '100'
+          TJ_MAX_PAGES: '200'
+          TJ_DELAY_MS: '750'
+          TJ_REQUEST_TIMEOUT_MS: '30000'
+          DEBUG_TJ: '1'
