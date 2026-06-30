@@ -39,6 +39,23 @@ This repo intentionally excludes the old dashboard, cross-store matching, Whole 
 
 To scrape only specific stores, set `TJ_STORE_SLUGS` to a comma-separated list of store slugs.
 
+## Dashboard
+
+Run the Replit-friendly dashboard locally with:
+
+```sh
+npm start
+```
+
+The dashboard reads Supabase on the server, so `SUPABASE_SERVICE_KEY` stays private and is never sent to the browser.
+
+For Replit:
+
+1. Import this GitHub repo.
+2. Add Replit Secrets for `SUPABASE_URL` and `SUPABASE_SERVICE_KEY`.
+3. Run the app with `npm start`.
+4. Publish the Repl to get a public `.replit.app` URL.
+
 ## GitHub Actions
 
 The workflow at `.github/workflows/scrape-traderjoes.yml` runs weekly on Mondays at 8:00 UTC and can also be triggered manually.

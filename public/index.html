@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bay Area Trader Joe's Price Monitor</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Bay Area grocery intelligence</p>
+        <h1>Trader Joe's Price Monitor</h1>
+      </div>
+      <div class="status-pill" id="refresh-status">Loading data</div>
+    </header>
+
+    <main>
+      <section class="summary-grid" aria-label="Key metrics">
+        <article class="metric">
+          <span class="metric-label">Stores tracked</span>
+          <strong id="kpi-stores">--</strong>
+        </article>
+        <article class="metric">
+          <span class="metric-label">Current product rows</span>
+          <strong id="kpi-products">--</strong>
+        </article>
+        <article class="metric">
+          <span class="metric-label">Distinct SKUs</span>
+          <strong id="kpi-skus">--</strong>
+        </article>
+        <article class="metric">
+          <span class="metric-label">Average price</span>
+          <strong id="kpi-average">--</strong>
+        </article>
+      </section>
+
+      <section class="insight-layout">
+        <article class="panel span-7">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Latest successful extraction</p>
+              <h2>Coverage by store</h2>
+            </div>
+            <span class="muted" id="latest-finished">--</span>
+          </div>
+          <div class="bar-chart" id="store-bars"></div>
+        </article>
+
+        <article class="panel span-5">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Price architecture</p>
+              <h2>Catalog distribution</h2>
+            </div>
+          </div>
+          <div class="distribution" id="price-distribution"></div>
+        </article>
+      </section>
+
+      <section class="panel">
+        <div class="section-heading table-heading">
+          <div>
+            <p class="eyebrow">Current catalog snapshot</p>
+            <h2>Products</h2>
+          </div>
+          <label class="search">
+            <span>Search</span>
+            <input id="product-search" type="search" placeholder="Item, SKU, store">
+          </label>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Store</th>
+                <th>Unit</th>
+                <th>SKU</th>
+                <th class="numeric">Price</th>
+              </tr>
+            </thead>
+            <tbody id="product-table">
+              <tr>
+                <td colspan="5">Loading latest products...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Operational health</p>
+            <h2>Recent scrape runs</h2>
+          </div>
+        </div>
+        <div class="run-list" id="run-list"></div>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
